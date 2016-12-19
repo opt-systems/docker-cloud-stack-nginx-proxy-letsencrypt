@@ -1,0 +1,23 @@
+letsencrypt-nginx-proxy:
+  image: 'jrcs/letsencrypt-nginx-proxy-companion:latest'
+  tags:
+    - my-super-node
+  volumes:
+    - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    - '/opt/certs:/etc/nginx/certs'
+  volumes_from:
+    - nginx-proxy
+nginx-proxy:
+  image: 'jwilder/nginx-proxy:latest'
+  ports:
+    - '80:80'
+    - '443:443'
+  tags:
+    - my-super-node
+  volumes:
+    - '/var/run/docker.sock:/tmp/docker.sock:ro'
+    - /etc/nginx/conf.d
+    - /etc/nginx/vhost.d
+    - /usr/share/nginx/html
+    - '/opt/certs:/etc/nginx/certs:ro'
+    - '/opt/htpasswd:/etc/nginx/htpasswd'
